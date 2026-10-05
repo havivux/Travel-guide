@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#ff8fab" />
+<title>Welcome anh Tan to Hanoi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --pink: #ff8fab;
+    --pink-soft: #ffe5ec;
+    --yellow: #ffd166;
+    --yellow-soft: #fff4cc;
+    --mint: #7bdcb5;
+    --mint-soft: #dcf7ec;
+    --sky: #7ec8f5;
+    --sky-soft: #e1f3fd;
+    --lilac: #b9a3f5;
+    --lilac-soft: #ece6fd;
+    --ink: #4a3f5c;
+    --card-shadow: 0 6px 0 rgba(74, 63, 92, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    font-family: "Fredoka", system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 10% 10%, var(--pink-soft) 0, transparent 40%),
+      radial-gradient(circle at 90% 20%, var(--sky-soft) 0, transparent 40%),
+      radial-gradient(circle at 50% 90%, var(--yellow-soft) 0, transparent 45%),
+      #fffaf5;
+    line-height: 1.5;
+  }
+  .script { font-family: "Pacifico", cursive; font-weight: 400; }
+
+  /* Hero */
+  header {
+    position: relative;
+    text-align: center;
+    padding: calc(56px + env(safe-area-inset-top)) 16px 64px;
+    background: linear-gradient(160deg, var(--pink) 0%, var(--lilac) 55%, var(--sky) 100%);
+    color: #fff;
+    overflow: hidden;
+  }
+  header h1 { font-size: clamp(1.9rem, 9vw, 4.2rem); line-height: 1.25; text-shadow: 2px 2px 0 rgba(74,63,92,.25); }
+  header p { font-size: 1rem; margin-top: 8px; opacity: .95; }
+  .badges { margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    background: rgba(255,255,255,.9); color: var(--ink);
+    padding: 4px 12px; border-radius: 999px; font-weight: 500; font-size: .85rem;
+    box-shadow: 0 3px 0 rgba(74,63,92,.15);
+  }
+  .float { position: absolute; top: 12px; font-size: 1.8rem; animation: bob 5s ease-in-out infinite; user-select: none; }
+  .float:nth-child(1) { left: 6%; }
+  .float:nth-child(2) { left: 32%; animation-delay: -1.5s; }
+  .float:nth-child(3) { right: 32%; animation-delay: -3s; }
+  .float:nth-child(4) { right: 6%; animation-delay: -2s; }
+  @keyframes bob { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-14px) rotate(4deg); } }
+  .wave { position: absolute; bottom: -1px; left: 0; width: 100%; height: 36px; }
+
+  /* Nav: horizontally scrollable strip on mobile */
+  nav {
+    position: sticky; top: 0; z-index: 1100;
+    display: flex; gap: 8px; justify-content: flex-start;
+    padding: 8px 12px; background: rgba(255,250,245,.92); backdrop-filter: blur(8px);
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    flex: 0 0 auto; min-height: 44px; display: inline-flex; align-items: center;
+    text-decoration: none; color: var(--ink); font-weight: 500; white-space: nowrap;
+    padding: 6px 16px; border-radius: 999px; background: #fff;
+    box-shadow: 0 3px 0 rgba(74,63,92,.12); transition: transform .15s, background .15s;
+  }
+  nav a:active { background: var(--yellow-soft); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 0 14px calc(40px + env(safe-area-inset-bottom)); }
+  section { margin-top: 36px; scroll-margin-top: 64px; }
+  .section-title { text-align: center; margin-bottom: 6px; font-size: clamp(1.6rem, 7vw, 2.5rem); }
+  .section-sub { text-align: center; margin-bottom: 20px; opacity: .75; font-size: .95rem; }
+  .t-pink { color: var(--pink); } .t-mint { color: #3cbf90; } .t-sky { color: #3aa6e8; } .t-lilac { color: var(--lilac); }
+
+  /* Map */
+  .map-wrap {
+    background: #fff; border-radius: 20px; padding: 8px;
+    border: 3px solid var(--ink); box-shadow: 0 6px 0 rgba(74,63,92,.18);
+  }
+  #map, .map-wrap iframe { width: 100%; height: 55vh; min-height: 280px; max-height: 420px; border: 0; border-radius: 14px; display: block; }
+  .legend { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .legend span {
+    display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+    border-radius: 999px; font-size: .88rem; font-weight: 500;
+  }
+  .legend i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ink); display: inline-block; }
+  .lg-home { background: var(--pink-soft); } .lg-home i { background: var(--pink); }
+  .lg-work { background: var(--sky-soft); } .lg-work i { background: var(--sky); }
+  .lg-wedding { background: var(--yellow-soft); } .lg-wedding i { background: var(--yellow); }
+  .pin { font-size: 22px; line-height: 32px; text-align: center; width: 32px; height: 32px; background: #fff; border: 3px solid var(--ink); border-radius: 50%; box-shadow: 0 3px 0 rgba(74,63,92,.25); }
+  .map-note { text-align: center; font-size: .85rem; margin-top: 10px; opacity: .7; }
+  .map-tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 10px; }
+  .map-tabs button {
+    font: inherit; font-weight: 500; cursor: pointer; color: var(--ink);
+    padding: 8px 16px; min-height: 44px; border-radius: 999px; border: 2px solid var(--ink);
+    background: #fff; transition: background .15s;
+  }
+  .map-tabs button[data-key="home"].active { background: var(--pink-soft); }
+  .map-tabs button[data-key="work"].active { background: var(--sky-soft); }
+  .map-tabs button[data-key="wedding"].active { background: var(--yellow-soft); }
+
+  /* Cards */
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .card {
+    background: #fff; border-radius: 20px; overflow: hidden;
+    border: 3px solid var(--ink); box-shadow: var(--card-shadow);
+    transition: transform .2s; display: flex; flex-direction: column;
+  }
+  .card .thumb {
+    height: 140px; background-size: cover; background-position: center;
+    display: flex; align-items: center; justify-content: center; font-size: 3.4rem;
+    border-bottom: 3px solid var(--ink);
+  }
+  .card .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .card h3 { font-size: 1.2rem; }
+  .card .addr { font-size: .88rem; opacity: .7; }
+  .card .desc { font-size: .93rem; }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 10px; }
+  .pill { font-size: .82rem; font-weight: 500; padding: 3px 12px; border-radius: 999px; border: 2px solid var(--ink); }
+  .pill.dist { background: var(--yellow); }
+  .pill.walk { background: var(--mint); }
+  .pill.price { background: var(--lilac-soft); }
+  .card a.go {
+    margin-top: 10px; text-align: center; text-decoration: none; color: var(--ink);
+    font-weight: 600; padding: 12px 7px; min-height: 44px; border-radius: 14px; border: 2px solid var(--ink);
+    transition: background .15s;
+  }
+  .card a.go:active { background: var(--yellow-soft); }
+
+  .food .thumb { background-color: var(--pink-soft); }
+  .cafe .thumb { background-color: var(--mint-soft); }
+  .activity .thumb { background-color: var(--sky-soft); }
+  .tag { position: absolute; top: 10px; left: 10px; background: #fff; border: 2px solid var(--ink); border-radius: 999px; padding: 2px 12px; font-size: .78rem; font-weight: 500; }
+  .thumb-wrap { position: relative; }
+
+  footer { text-align: center; padding: 24px 16px calc(32px + env(safe-area-inset-bottom)); opacity: .75; }
+  footer .script { font-size: 1.4rem; color: var(--pink); }
+  footer a { display: inline-block; padding: 8px 4px; }
+
+  /* Tablet and up */
+  @media (min-width: 600px) {
+    header { padding: 80px 20px 72px; }
+    header p { font-size: 1.1rem; }
+    .badge { padding: 6px 16px; font-size: .95rem; }
+    .float { top: 22px; font-size: 2.2rem; }
+    .float:nth-child(1) { left: 8%; }
+    .float:nth-child(2) { left: 28%; }
+    .float:nth-child(3) { right: 28%; }
+    .float:nth-child(4) { right: 8%; }
+    .wave { height: 52px; }
+    nav { justify-content: center; }
+    main { padding: 0 18px 60px; }
+    section { margin-top: 48px; scroll-margin-top: 70px; }
+    .section-sub { margin-bottom: 28px; }
+    .map-wrap { border-radius: 28px; padding: 14px; box-shadow: 0 8px 0 rgba(74,63,92,.18); }
+    #map, .map-wrap iframe { height: 420px; border-radius: 18px; }
+    .legend { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 14px; }
+    .legend span { display: inline-flex; padding: 6px 14px; font-size: .92rem; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .card { border-radius: 24px; }
+    .card .thumb { height: 150px; }
+  }
+
+  /* Desktop */
+  @media (min-width: 960px) {
+    header { padding: 96px 20px 90px; }
+    header p { font-size: 1.15rem; }
+    .float { top: 26px; font-size: 2.4rem; }
+    .wave { height: 60px; }
+    section { margin-top: 56px; }
+    #map, .map-wrap iframe { height: 460px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+  }
+
+  @media (hover: hover) {
+    nav a:hover { transform: translateY(-2px); background: var(--yellow-soft); }
+    .card:hover { transform: translateY(-6px) rotate(-.6deg); }
+    .card a.go:hover { background: var(--yellow-soft); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="float">☁️</span><span class="float">🛵</span><span class="float">🌸</span><span class="float">☕</span>
+  <h1 class="script">Welcome anh Tan to Hanoi ◝(ᵔᗜᵔ)◜</h1>
+  <p>Eat, sip &amp; wander around the Old Quarter ✨</p>
+  <div class="badges">
+    <span class="badge">🏡 Bát Sứ Homestay</span>
+    <span class="badge">🏢 HITC Building</span>
+    <span class="badge">🍜 Food</span>
+    <span class="badge">☕ Cafe</span>
+    <span class="badge">🎈 Activities</span>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="#fffaf5" d="M0,30 C180,70 360,0 540,30 C720,60 900,5 1080,30 C1260,55 1380,20 1440,30 L1440,60 L0,60 Z"/></svg>
+</header>
+
+<nav>
+  <a href="#map-section">🗺️ Map</a>
+  <a href="#food">🍜 Food</a>
+  <a href="#cafe">☕ Cafe</a>
+  <a href="#activities">🎈 Activities</a>
+</nav>
+
+<main>
+  <section id="map-section">
+    <h2 class="section-title script t-pink">Where we are</h2>
+    <p class="section-sub">Homestay, office &amp; wedding venue</p>
+    <div class="map-wrap">
+      <div class="map-tabs" role="tablist">
+        <button type="button" role="tab" data-key="home">🏡 Homestay</button>
+        <button type="button" role="tab" data-key="work">🏢 Company</button>
+        <button type="button" role="tab" data-key="wedding">💒 Wedding venue</button>
+      </div>
+      <iframe id="map" title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <p class="map-note" id="map-note"></p>
+    </div>
+  </section>
+
+  <section id="food">
+    <h2 class="section-title script t-pink">Yummy Food Spots</h2>
+    <p class="section-sub">Distance is measured from the homestay (straight line)</p>
+    <div class="grid" id="food-grid"></div>
+  </section>
+
+  <section id="cafe">
+    <h2 class="section-title script t-mint">Cozy Cafes</h2>
+    <p class="section-sub">Stay productive, but far from the sun... ☀️</p>
+    <div class="grid" id="cafe-grid"></div>
+  </section>
+
+  <section id="activities">
+    <h2 class="section-title script t-sky">Things To Do</h2>
+    <p class="section-sub">Fill your days with fun</p>
+    <div class="grid" id="activity-grid"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="script">Stay out of office! 💖</div>
+  <p>Need more info? Contact your Hanoi buddy, Hà Vi Vu: <a href="tel:+84976005156">0976005156</a></p>
+  <small>Sample data – to be replaced with the final list.</small>
+</footer>
+
+<script>
+  /* ====== CONFIG ====== */
+  const HOMESTAY = { name: "Homestay – Bát Sứ St", lat: 21.034627042390714, lng: 105.84733977949189, emoji: "🏡" };
+  const COMPANY  = { name: "Company – HITC Building", lat: 21.036562342472187, lng: 105.78351204085867, emoji: "🏢" };
+  const WEDDING  = { name: "Wedding venue – Promes Center", lat: 21.03745212371854, lng: 105.78727401017534, emoji: "💒" };
+  const PINS = { home: HOMESTAY, work: COMPANY, wedding: WEDDING };
+
+  /* ====== SAMPLE DATA (replace later) ====== */
+  const food = [
+    { name: "Phở Bát Đàn", emoji: "🍜", address: "49 Bát Đàn, Hoàn Kiếm", lat: 21.0346, lng: 105.8466, price: "₫", desc: "Classic beef noodle soup loved by locals.", tag: "Breakfast" },
+    { name: "Chả Cá Lã Vọng", emoji: "🐟", address: "14 Chả Cá, Hoàn Kiếm", lat: 21.0348, lng: 105.8510, price: "₫₫", desc: "Turmeric fish with dill, sizzling at the table.", tag: "Dinner" },
+    { name: "Bánh Mì 25", emoji: "🥖", address: "25 Hàng Cá, Hoàn Kiếm", lat: 21.0345, lng: 105.8512, price: "₫", desc: "Crispy baguette stuffed with goodies.", tag: "Snack" },
+    { name: "Bún Chả Hương Liên", emoji: "🥢", address: "24 Lê Văn Hưu, Hai Bà Trưng", lat: 21.0170, lng: 105.8520, price: "₫₫", desc: "Grilled pork &amp; noodles, the Obama favorite.", tag: "Lunch" },
+  ];
+
+  const cafes = [
+    { name: "Cà Phê Giảng", image: "https://picsum.photos/seed/hanoi-cafe-1/600/400", emoji: "🥚", address: "39 Nguyễn Hữu Huân, Hoàn Kiếm", lat: 21.0330, lng: 105.8525, price: "₫", desc: "The original egg coffee.", tag: "Egg coffee" },
+    { name: "Cafe Phố Cổ", image: "https://picsum.photos/seed/hanoi-cafe-2/600/400", emoji: "🌿", address: "11 Hàng Gai, Hoàn Kiếm", lat: 21.0336, lng: 105.8500, price: "₫₫", desc: "Hidden balcony over Hoàn Kiếm lake.", tag: "Lake view" },
+    { name: "The Note Coffee", image: "https://picsum.photos/seed/hanoi-cafe-3/600/400", emoji: "📝", address: "64 Lương Văn Can, Hoàn Kiếm", lat: 21.0310, lng: 105.8510, price: "₫₫", desc: "Colorful sticky notes on every wall.", tag: "Aesthetic" },
+  ];
+
+  const activities = [
+    { name: "Hoàn Kiếm Lake Walk", emoji: "🌸", address: "Hoàn Kiếm", lat: 21.0287, lng: 105.8522, price: "Free", desc: "Stroll around the lake and cross The Huc Bridge.", tag: "Morning" },
+    { name: "Temple of Literature", emoji: "🏯", address: "58 Quốc Tử Giám, Đống Đa", lat: 21.0285, lng: 105.8355, price: "₫", desc: "Vietnam's first university, from 1070.", tag: "Culture" },
+    { name: "Thăng Long Water Puppets", emoji: "🎭", address: "57B Đinh Tiên Hoàng, Hoàn Kiếm", lat: 21.0314, lng: 105.8532, price: "₫₫", desc: "Traditional puppet show, 50 minutes.", tag: "Show" },
+    { name: "Train Street", emoji: "🚂", address: "Phùng Hưng, Hoàn Kiếm", lat: 21.0262, lng: 105.8441, price: "Free", desc: "Snap photos as the train rolls through.", tag: "Photo" },
+  ];
+
+  /* ====== HELPERS ====== */
+  function distanceMeters(a, b) {
+    const R = 6371000, rad = d => d * Math.PI / 180;
+    const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+  const fmtDist = m => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+  const fmtWalk = m => `${Math.max(1, Math.round(m / 80))} min walk`; // ~80 m/min
+
+  function render(list, containerId, cls) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = list
+      .map(p => ({ ...p, d: distanceMeters(HOMESTAY, p) }))
+      .sort((a, b) => a.d - b.d)
+      .map(p => `
+        <article class="card ${cls}">
+          <div class="thumb-wrap">
+            <div class="thumb" ${p.image ? `style="background-image:url('${p.image}')"` : ""}>${p.image ? "" : p.emoji}</div>
+            ${p.tag ? `<span class="tag">${p.emoji} ${p.tag}</span>` : ""}
+          </div>
+          <div class="body">
+            <h3>${p.name}</h3>
+            <div class="addr">📍 ${p.address}</div>
+            <div class="desc">${p.desc}</div>
+            <div class="meta">
+              <span class="pill dist">🏡 ${fmtDist(p.d)}</span>
+              <span class="pill walk">🚶 ${fmtWalk(p.d)}</span>
+              <span class="pill price">${p.price}</span>
+            </div>
+            <a class="go" target="_blank" rel="noopener"
+               href="https://www.google.com/maps/dir/?api=1&origin=${HOMESTAY.lat},${HOMESTAY.lng}&destination=${p.lat},${p.lng}&travelmode=walking">Get directions</a>
+          </div>
+        </article>`)
+      .join("");
+  }
+
+  render(food, "food-grid", "food");
+  render(cafes, "cafe-grid", "cafe");
+  render(activities, "activity-grid", "activity");
+
+  /* ====== MAP ====== */
+  // Keyless Google Maps embed: one pinned location per tab, no API key needed.
+  const mapFrame = document.getElementById("map");
+  const mapTabs = document.querySelectorAll(".map-tabs button");
+
+  function showPin(key) {
+    const p = PINS[key];
+    mapFrame.src = `https://maps.google.com/maps?q=${p.lat},${p.lng}&z=16&output=embed`;
+    document.getElementById("map-note").textContent = p.name;
+    mapTabs.forEach(b => {
+      const on = b.dataset.key === key;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-selected", on);
+    });
+  }
+
+  mapTabs.forEach(b => b.addEventListener("click", () => showPin(b.dataset.key)));
+  showPin("home");
+</script>
+</body>
+</html>
