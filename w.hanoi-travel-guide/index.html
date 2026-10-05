@@ -7,7 +7,7 @@
 <title>Welcome anh Tan to Hanoi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Pacifico&family=Be+Vietnam+Pro:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
 <style>
   :root {
     --pink: #ff8fab;
@@ -113,8 +113,38 @@
   .map-tabs button[data-key="work"].active { background: var(--sky-soft); }
   .map-tabs button[data-key="wedding"].active { background: var(--yellow-soft); }
 
+  /* Notes */
+  .notes {
+    list-style: none; display: flex; flex-direction: column; gap: 12px;
+    max-width: 640px; margin: 0 auto;
+  }
+  .notes li {
+    display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px;
+    background: var(--yellow-soft); border: 3px solid var(--ink); border-radius: 20px;
+    box-shadow: var(--card-shadow); font-size: .98rem;
+  }
+  .notes .ico { font-size: 1.6rem; line-height: 1.2; }
+
   /* Cards */
-  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  /* Cards: horizontal carousel */
+  .carousel { position: relative; }
+  .grid {
+    display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    padding: 8px 4px 14px;
+  }
+  .grid::-webkit-scrollbar { display: none; }
+  .grid > .card { flex: 0 0 82%; scroll-snap-align: start; }
+  .arrow {
+    position: absolute; top: 40%; z-index: 5; width: 44px; height: 44px; border-radius: 50%;
+    font: inherit; font-size: 1.6rem; line-height: 1; cursor: pointer; color: var(--ink);
+    border: 3px solid var(--ink); background: #fff; box-shadow: 0 3px 0 rgba(74,63,92,.25);
+    display: flex; align-items: center; justify-content: center; padding-bottom: 4px;
+    transition: background .15s, opacity .15s;
+  }
+  .arrow.prev { left: -6px; } .arrow.next { right: -6px; }
+  .arrow:active { background: var(--yellow-soft); }
+  .arrow:disabled { opacity: 0; pointer-events: none; }
   .card {
     background: #fff; border-radius: 20px; overflow: hidden;
     border: 3px solid var(--ink); box-shadow: var(--card-shadow);
@@ -126,9 +156,10 @@
     border-bottom: 3px solid var(--ink);
   }
   .card .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-  .card h3 { font-size: 1.2rem; }
-  .card .addr { font-size: .88rem; opacity: .7; }
-  .card .desc { font-size: .93rem; }
+  /* Fixed slot heights keep each row at the same position on every card */
+  .card h3 { font-size: 1.2rem; min-height: 2.4em; line-height: 1.2; }
+  .card .addr { font-size: .88rem; opacity: .7; min-height: 3em; }
+  .card .desc { font-size: .93rem; min-height: 3em; }
   .meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 10px; }
   .pill { font-size: .82rem; font-weight: 500; padding: 3px 12px; border-radius: 999px; border: 2px solid var(--ink); }
   .pill.dist { background: var(--yellow); }
@@ -140,6 +171,33 @@
     transition: background .15s;
   }
   .card a.go:active { background: var(--yellow-soft); }
+
+  .card .hours { font-size: .88rem; font-weight: 500; min-height: 1.5em; }
+  .card .note { font-family: "Be Vietnam Pro", system-ui, sans-serif; font-size: .84rem; font-style: italic; background: var(--yellow-soft); border-radius: 10px; padding: 6px 10px; min-height: calc(3em + 12px); }
+  .card .note:empty { background: none; }
+  .card .tags { display: flex; gap: 6px; flex-wrap: wrap; align-content: flex-start; min-height: 26px; }
+  .card .tags span { font-size: .78rem; font-weight: 500; padding: 1px 10px; border-radius: 999px; background: var(--mint-soft); border: 2px solid var(--ink); text-transform: capitalize; }
+  .card .actions { display: flex; gap: 8px; }
+  .card .actions a.go { flex: 1; }
+  .cafe .thumb { height: 180px; }
+
+  /* Cafe filters */
+  .filters { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-bottom: 20px; }
+  .filters input[type=search] {
+    width: 100%; max-width: 420px; font: inherit; color: var(--ink); min-height: 44px;
+    padding: 8px 18px; border-radius: 999px; border: 2px solid var(--ink); background: #fff;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chips button {
+    font: inherit; font-weight: 500; cursor: pointer; color: var(--ink); text-transform: capitalize;
+    padding: 6px 14px; min-height: 44px; border-radius: 999px; border: 2px solid var(--ink);
+    background: #fff; transition: background .15s;
+  }
+  .chips button[aria-pressed=true] { background: var(--mint); }
+  .chips button small { opacity: .7; margin-left: 4px; }
+  .filter-count { font-size: .88rem; opacity: .75; }
+  .filter-reset { font: inherit; cursor: pointer; color: var(--ink); background: none; border: none; text-decoration: underline; padding: 8px; }
+  .empty { flex: 1; text-align: center; padding: 24px 0; opacity: .75; }
 
   .food .thumb { background-color: var(--pink-soft); }
   .cafe .thumb { background-color: var(--mint-soft); }
@@ -170,7 +228,9 @@
     #map, .map-wrap iframe { height: 420px; border-radius: 18px; }
     .legend { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 14px; }
     .legend span { display: inline-flex; padding: 6px 14px; font-size: .92rem; }
-    .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid { gap: 20px; }
+    .grid > .card { flex-basis: 300px; }
+    .arrow.prev { left: -14px; } .arrow.next { right: -14px; }
     .card { border-radius: 24px; }
     .card .thumb { height: 150px; }
   }
@@ -183,7 +243,8 @@
     .wave { height: 60px; }
     section { margin-top: 56px; }
     #map, .map-wrap iframe { height: 460px; }
-    .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+    .grid { gap: 22px; }
+    .arrow:hover { background: var(--yellow-soft); }
   }
 
   @media (hover: hover) {
@@ -203,19 +264,13 @@
 <header>
   <span class="float">☁️</span><span class="float">🛵</span><span class="float">🌸</span><span class="float">☕</span>
   <h1 class="script">Welcome anh Tan to Hanoi ◝(ᵔᗜᵔ)◜</h1>
-  <p>Eat, sip &amp; wander around the Old Quarter ✨</p>
-  <div class="badges">
-    <span class="badge">🏡 Bát Sứ Homestay</span>
-    <span class="badge">🏢 HITC Building</span>
-    <span class="badge">🍜 Food</span>
-    <span class="badge">☕ Cafe</span>
-    <span class="badge">🎈 Activities</span>
-  </div>
+  <p>Eat, sip &amp; wander around Hanoi ✨</p>
   <svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="#fffaf5" d="M0,30 C180,70 360,0 540,30 C720,60 900,5 1080,30 C1260,55 1380,20 1440,30 L1440,60 L0,60 Z"/></svg>
 </header>
 
 <nav>
   <a href="#map-section">🗺️ Map</a>
+  <a href="#notes">📝 Notes</a>
   <a href="#food">🍜 Food</a>
   <a href="#cafe">☕ Cafe</a>
   <a href="#activities">🎈 Activities</a>
@@ -236,29 +291,55 @@
     </div>
   </section>
 
+  <section id="notes">
+    <h2 class="section-title script t-lilac">Notes</h2>
+    <p class="section-sub">Good to know before you go</p>
+    <ul class="notes">
+      <li><span class="ico">😷</span><span>Mang khẩu trang dày vì gần đây HN nhiều công trường, dễ bụi</span></li>
+      <li><span class="ico">👕</span><span>Mang quần áo hè và áo khoác mỏng</span></li>
+      <li><span class="ico">🚦</span><span>Đường di chuyển từ homestay ra office rất tắc &gt;&lt;</span></li>
+    </ul>
+  </section>
+
   <section id="food">
     <h2 class="section-title script t-pink">Yummy Food Spots</h2>
     <p class="section-sub">Distance is measured from the homestay (straight line)</p>
-    <div class="grid" id="food-grid"></div>
+    <div class="carousel">
+      <button type="button" class="arrow prev" aria-label="Previous">&#8249;</button>
+      <div class="grid" id="food-grid"></div>
+      <button type="button" class="arrow next" aria-label="Next">&#8250;</button>
+    </div>
   </section>
 
   <section id="cafe">
     <h2 class="section-title script t-mint">Cozy Cafes</h2>
     <p class="section-sub">Stay productive, but far from the sun... ☀️</p>
-    <div class="grid" id="cafe-grid"></div>
+    <div class="filters">
+      <input type="search" id="cafe-search" placeholder="Search by name or area…" aria-label="Search cafes" autocomplete="off" />
+      <div class="chips" id="cafe-chips" role="group" aria-label="Filter cafes by tag"></div>
+      <div class="filter-count" id="cafe-count" aria-live="polite"></div>
+    </div>
+    <div class="carousel">
+      <button type="button" class="arrow prev" aria-label="Previous">&#8249;</button>
+      <div class="grid" id="cafe-grid"></div>
+      <button type="button" class="arrow next" aria-label="Next">&#8250;</button>
+    </div>
   </section>
 
   <section id="activities">
     <h2 class="section-title script t-sky">Things To Do</h2>
     <p class="section-sub">Fill your days with fun</p>
-    <div class="grid" id="activity-grid"></div>
+    <div class="carousel">
+      <button type="button" class="arrow prev" aria-label="Previous">&#8249;</button>
+      <div class="grid" id="activity-grid"></div>
+      <button type="button" class="arrow next" aria-label="Next">&#8250;</button>
+    </div>
   </section>
 </main>
 
 <footer>
   <div class="script">Stay out of office! 💖</div>
-  <p>Need more info? Contact your Hanoi buddy, Hà Vi Vu: <a href="tel:+84976005156">0976005156</a></p>
-  <small>Sample data – to be replaced with the final list.</small>
+  <p>Need more info? Contact your Hanoi buddy, Em Hà Vi: <a href="tel:+84976005156">0976005156</a></p>
 </footer>
 
 <script>
@@ -276,10 +357,17 @@
     { name: "Bún Chả Hương Liên", emoji: "🥢", address: "24 Lê Văn Hưu, Hai Bà Trưng", lat: 21.0170, lng: 105.8520, price: "₫₫", desc: "Grilled pork &amp; noodles, the Obama favorite.", tag: "Lunch" },
   ];
 
+  // Photos live in input/cafe; "quiet" = tag "ít nàng thơ" in the source list.
   const cafes = [
-    { name: "Cà Phê Giảng", image: "https://picsum.photos/seed/hanoi-cafe-1/600/400", emoji: "🥚", address: "39 Nguyễn Hữu Huân, Hoàn Kiếm", lat: 21.0330, lng: 105.8525, price: "₫", desc: "The original egg coffee.", tag: "Egg coffee" },
-    { name: "Cafe Phố Cổ", image: "https://picsum.photos/seed/hanoi-cafe-2/600/400", emoji: "🌿", address: "11 Hàng Gai, Hoàn Kiếm", lat: 21.0336, lng: 105.8500, price: "₫₫", desc: "Hidden balcony over Hoàn Kiếm lake.", tag: "Lake view" },
-    { name: "The Note Coffee", image: "https://picsum.photos/seed/hanoi-cafe-3/600/400", emoji: "📝", address: "64 Lương Văn Can, Hoàn Kiếm", lat: 21.0310, lng: 105.8510, price: "₫₫", desc: "Colorful sticky notes on every wall.", tag: "Aesthetic" },
+    { name: "Bấc Cafe & Chill", image: "input/cafe/bấc.jpg", emoji: "☕", address: "12 ngách 31 Ng. 189 Hoàng Hoa Thám, Ngọc Hà", lat: 21.0404152, lng: 105.8202352, hours: "9h-23h", tags: ["working", "reading"], mapUrl: "https://maps.app.goo.gl/Y3Fjrz8MUXtfXPyy7" },
+    { name: "Tổ Chim Xanh - Bluebirds' Nest", image: "input/cafe/tổ chim xanh.png", emoji: "☕", address: "27 Đặng Dung, Ngõ 27, Ba Đình", lat: 21.0419391, lng: 105.8414268, hours: "8h-22h30", tags: ["working", "reading", "quiet"], note: "Highly recommended!! Many cute cats and chill", mapUrl: "https://maps.app.goo.gl/YAJR7syR8g9mYqoW7" },
+    { name: "Tranquil Books Coffee", image: "input/cafe/tranquil 2.jpg", emoji: "☕", address: "18b Nguyễn Biểu, Ba Đình", lat: 21.0416115, lng: 105.8399759, hours: "8h-22h30", tags: ["working", "reading", "quiet"], note: "Nhà kính, view nhà thờ siêu đẹp, ít nàng thơ", mapUrl: "https://maps.app.goo.gl/uxFy8FGASst49oSp6" },
+    { name: "Briefly on Earth", image: "input/cafe/briefly.png", emoji: "☕", address: "95F Lý Nam Đế, Hoàn Kiếm", lat: 21.030511, lng: 105.844105, hours: "7h-0h30", tags: ["working"], mapUrl: "https://maps.app.goo.gl/XfmgHSDcruAcSxJQ6" },
+    { name: "Giao Mùa", image: "input/cafe/giao mùa.png", emoji: "☕", address: "77 Lò Sũ, Hoàn Kiếm", lat: 21.0313635, lng: 105.8541202, hours: "7h-21h15", tags: ["chilling"], note: "Decor độc lạ hay ho, dễ có nàng thơ", mapUrl: "https://maps.app.goo.gl/vFezmfJAxWFWGgdD8" },
+    { name: "Aperitivo", image: "input/cafe/aperitivo.png", emoji: "☕", address: "37 Trúc Bạch, Ba Đình", lat: 21.0484552, lng: 105.8404425, hours: "8h30-0h", tags: ["chilling", "lake view"], mapUrl: "https://maps.app.goo.gl/6Jis1sF4Sa939DMK9" },
+    { name: "Greyhaus", image: "input/cafe/greyhaus.png", emoji: "☕", address: "55C Phan Chu Trinh, Cửa Nam", lat: 21.0191636, lng: 105.8555032, hours: "7h30-23h30", tags: ["working"], note: "Trần hơi thấp", mapUrl: "https://maps.app.goo.gl/j3E1Kunn2TAis1uR7" },
+    { name: "Ti-răng - Café and Brunch", image: "input/cafe/ti rang.png", emoji: "☕", address: "54A Gia Ngư, Phố cổ, Hoàn Kiếm", lat: 21.0329602, lng: 105.8516324, hours: "8h-23h", tags: ["working", "chilling"], mapUrl: "https://maps.app.goo.gl/uoST2Ntv41Mm1n2w5" },
+    { name: "Tamai Hanoi", image: "input/cafe/tamai.png", emoji: "☕", address: "2nd & 3rd floor, 84 Quán Sứ, Cửa Nam", lat: 21.0237193, lng: 105.8445451, hours: "8h30-19h30", tags: ["working", "chilling"], mapUrl: "https://maps.app.goo.gl/oB4d5GWkMpD5byHr7" },
   ];
 
   const activities = [
@@ -301,34 +389,113 @@
 
   function render(list, containerId, cls) {
     const el = document.getElementById(containerId);
+    if (!list.length) {
+      el.innerHTML = `<p class="empty">No places match your filters 🫥</p>`;
+      updateArrows(el);
+      return;
+    }
+    // Render a slot for a field if any card in the list has it, so rows stay aligned.
+    const has = k => list.some(p => p[k]);
     el.innerHTML = list
       .map(p => ({ ...p, d: distanceMeters(HOMESTAY, p) }))
       .sort((a, b) => a.d - b.d)
       .map(p => `
         <article class="card ${cls}">
           <div class="thumb-wrap">
-            <div class="thumb" ${p.image ? `style="background-image:url('${p.image}')"` : ""}>${p.image ? "" : p.emoji}</div>
+            <div class="thumb" ${p.image ? `style="background-image:url('${encodeURI(p.image)}')"` : ""}>${p.image ? "" : p.emoji}</div>
             ${p.tag ? `<span class="tag">${p.emoji} ${p.tag}</span>` : ""}
           </div>
           <div class="body">
             <h3>${p.name}</h3>
             <div class="addr">📍 ${p.address}</div>
-            <div class="desc">${p.desc}</div>
+            ${has("hours") ? `<div class="hours">${p.hours ? `🕐 ${p.hours}` : ""}</div>` : ""}
+            ${has("tags") ? `<div class="tags">${(p.tags || []).map(t => `<span>${t}</span>`).join("")}</div>` : ""}
+            ${has("desc") ? `<div class="desc">${p.desc || ""}</div>` : ""}
+            ${has("note") ? `<div class="note">${p.note ? `💡 ${p.note}` : ""}</div>` : ""}
             <div class="meta">
               <span class="pill dist">🏡 ${fmtDist(p.d)}</span>
               <span class="pill walk">🚶 ${fmtWalk(p.d)}</span>
-              <span class="pill price">${p.price}</span>
+              ${p.price ? `<span class="pill price">${p.price}</span>` : ""}
             </div>
-            <a class="go" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/dir/?api=1&origin=${HOMESTAY.lat},${HOMESTAY.lng}&destination=${p.lat},${p.lng}&travelmode=walking">Get directions</a>
+            <div class="actions">
+              <a class="go" target="_blank" rel="noopener"
+                 href="https://www.google.com/maps/dir/?api=1&origin=${HOMESTAY.lat},${HOMESTAY.lng}&destination=${p.lat},${p.lng}&travelmode=walking">Get directions</a>
+              ${p.mapUrl ? `<a class="go" target="_blank" rel="noopener" href="${p.mapUrl}">View on map</a>` : ""}
+            </div>
           </div>
         </article>`)
       .join("");
+    el.scrollTo({ left: 0, behavior: "instant" });
+    updateArrows(el);
   }
 
+  /* ====== CAROUSELS ====== */
+  function updateArrows(track) {
+    const wrap = track.closest(".carousel");
+    const max = track.scrollWidth - track.clientWidth - 2;
+    wrap.querySelector(".prev").disabled = track.scrollLeft <= 2;
+    wrap.querySelector(".next").disabled = track.scrollLeft >= max;
+  }
+
+  document.querySelectorAll(".carousel").forEach(wrap => {
+    const track = wrap.querySelector(".grid");
+    const step = dir => track.scrollBy({ left: dir * track.clientWidth * 0.85, behavior: "smooth" });
+    wrap.querySelector(".prev").addEventListener("click", () => step(-1));
+    wrap.querySelector(".next").addEventListener("click", () => step(1));
+    track.addEventListener("scroll", () => updateArrows(track), { passive: true });
+    new ResizeObserver(() => updateArrows(track)).observe(track);
+  });
+
   render(food, "food-grid", "food");
-  render(cafes, "cafe-grid", "cafe");
   render(activities, "activity-grid", "activity");
+
+  /* ====== CAFE FILTERS ====== */
+  const cafeSearch = document.getElementById("cafe-search");
+  const cafeChips = document.getElementById("cafe-chips");
+  const cafeCount = document.getElementById("cafe-count");
+  const activeTags = new Set();
+  const allTags = [...new Set(cafes.flatMap(c => c.tags))];
+  const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/gi, "d").toLowerCase();
+
+  function buildChips() {
+    const chip = (tag, label, count) =>
+      `<button type="button" data-tag="${tag}" aria-pressed="false">${label}<small>${count}</small></button>`;
+    cafeChips.innerHTML = chip("", "All", cafes.length) +
+      allTags.map(t => chip(t, t, cafes.filter(c => c.tags.includes(t)).length)).join("");
+  }
+
+  function applyCafeFilters() {
+    const q = norm(cafeSearch.value.trim());
+    const list = cafes.filter(c =>
+      [...activeTags].every(t => c.tags.includes(t)) &&
+      (!q || norm(`${c.name} ${c.address} ${c.note || ""}`).includes(q)));
+    render(list, "cafe-grid", "cafe");
+    cafeChips.querySelectorAll("button").forEach(b => {
+      const t = b.dataset.tag;
+      b.setAttribute("aria-pressed", t ? activeTags.has(t) : activeTags.size === 0);
+    });
+    const filtered = activeTags.size || q;
+    cafeCount.innerHTML = `Showing ${list.length} of ${cafes.length} cafes` +
+      (filtered ? ` <button type="button" class="filter-reset" id="cafe-reset">Clear filters</button>` : "");
+  }
+
+  cafeChips.addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    const t = b.dataset.tag;
+    if (!t) activeTags.clear();
+    else if (!activeTags.delete(t)) activeTags.add(t);
+    applyCafeFilters();
+  });
+  cafeSearch.addEventListener("input", applyCafeFilters);
+  cafeCount.addEventListener("click", e => {
+    if (!e.target.closest("#cafe-reset")) return;
+    activeTags.clear();
+    cafeSearch.value = "";
+    applyCafeFilters();
+  });
+  buildChips();
+  applyCafeFilters();
 
   /* ====== MAP ====== */
   // Keyless Google Maps embed: one pinned location per tab, no API key needed.
